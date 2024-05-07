@@ -15,7 +15,13 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
+      #?? ??
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+  mvc:
+    charset: UTF-8
 
 
 # mybatis
