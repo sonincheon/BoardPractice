@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>글쓰기 폼</title>
+    <title>글 수정 폼</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,10 +30,7 @@
         textarea {
             height: 150px;
         }
-        input[type="file"] {
-            margin-bottom: 10px;
-        }
-        input[type="submit"] {
+        input[type="button"] {
             background-color: #007bff;
             color: #fff;
             padding: 10px 20px;
@@ -42,24 +39,30 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        input[type="submit"]:hover {
+        input[type="button"]:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-<form action="/save" method="post" enctype="multipart/form-data">
-    <label for="boardTitle">제목:</label>
-    <input type="text" id="boardTitle" name="boardTitle"><br>
-    <label for="boardWriter">작성자:</label>
-    <input type="text" id="boardWriter" name="boardWriter"><br>
-    <label for="boardPass">비밀번호:</label>
-    <input type="password" id="boardPass" name="boardPass"><br>
-    <label for="boardContents">내용:</label><br>
-    <textarea id="boardContents" name="boardContents" cols="30" rows="10"></textarea><br>
-    <label for="boardFile">파일:</label>
-    <input type="file" id="boardFile" name="boardFile" multiple><br>
-    <input type="submit" value="작성">
+<form th:action="@{|/update/${board.id}|}" method="post" name="updateForm">
+    <input type="hidden" name="id" th:value="${board.id}">
+    writer: <input type="text" name="boardWriter" th:value="${board.boardWriter}" readonly><br>
+    title: <input type="text" name="boardTitle" th:value="${board.boardTitle}"><br>
+    pass: <input type="password" name="boardPass" id="board-pass"><br>
+    contents: <textarea name="boardContents" cols="30" rows="10" th:text="${board.boardContents}"></textarea><br>
+    <input type="button" value="수정" onclick="board_update()">
 </form>
 </body>
+<script th:inline="javascript">
+    const board_update = () => {
+        const boardPass = document.getElementById("board-pass").value;
+        const passDB = [[${board.boardPass}]];
+        if (boardPass == passDB) {
+            updateForm.submit();
+        } else {
+            alert("비밀번호가 틀립니다!!");
+        }
+    }
+</script>
 </html>
